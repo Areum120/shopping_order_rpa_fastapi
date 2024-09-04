@@ -9,7 +9,6 @@ import pandas as pd
 from classi.send_email import Send
 import classi.data_store
 import classi.set_excel_form
-from classi.trial import TrialManager
 
 class ProgramWindow(QMainWindow):
     def __init__(self):
@@ -32,8 +31,6 @@ class ProgramWindow(QMainWindow):
         self.lineEdit_9.setEchoMode(QLineEdit.Password)
 
         self.start_auto_create_folder()
-
-        self.trial_action()
 
         self.pushButton.clicked.connect(self.select_directory)
         self.pushButton_2.clicked.connect(self.create_folder)
@@ -306,9 +303,7 @@ class ProgramWindow(QMainWindow):
                 self.label_4.setStyleSheet("color: red;")
             self.email_content_confirmed = False  # 발송 후 확인 상태 초기화
 
-    def trial_action(self):
-        trial_manager = TrialManager()
-        trial_manager.check_trial_period()
+
 
     # exception 발생시 종료 방지
     def my_exception_hook(exctype, value, traceback):

@@ -1,37 +1,67 @@
+from datetime import datetime
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from . import models, schemas
-from fastapi import HTTPException
+import bcrypt
+
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
 
 # 사용자 생성
 def create_user(db: Session, user: schemas.UserCreate):
     db_user = models.User(
         name=user.name,
         username=user.username,
-        password=user.password,  # 실제로는 해싱된 비밀번호를 저장해야 합니다.
+        password=user.password,
         phone=user.phone,
-        email=user.email,
-        recommender=user.recommender
+        email=user.email
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
+# 비밀번호 해쉬로 저장
+def get_password_hash(password: str) -> str:
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return hashed.decode('utf-8')
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+# 추천인 저장
+def get_user_id_by_username(db: Session, username: str):
+    user = db.query(models.User).filter(models.User.username == username).first()
+    return user.id if user else None
+
+def add_referral(db: Session, recommender_username: str, new_user_username: str):
+    referrer_id = get_user_id_by_username(db, recommender_username)
+    referree_id = get_user_id_by_username(db, new_user_username)
+
+    if not referrer_id or not referree_id:
+        raise ValueError("One or both of the usernames do not exist")
+
+    referral = models.Referral(
+        referrer_id=referrer_id,
+        referree_id=referree_id,
+        referred_at=datetime.utcnow()
+    )
+    db.add(referral)
+    db.commit()
+    db.refresh(referral)
+    return referral
+
+#사용자 조회 (username(ID)으로 조회)
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
 
 # 사용자 조회 (ID로 조회)
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.user_id == user_id).first()
 
-
-# 사용자 조회 (username으로 조회)
-def get_user_by_username(db: Session, username: str):
-    return db.query(models.User).filter(models.User.username == username).first()
-
-
 # 모든 사용자 조회
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
-
 
 # 사용자 업데이트
 def update_user(db: Session, user_id: int, user_update: schemas.UserUpdate):

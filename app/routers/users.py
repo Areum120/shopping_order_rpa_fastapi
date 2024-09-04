@@ -14,27 +14,49 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-# 사용자 생성
-@router.post("/", response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_username(db, username=user.username)
-    # 사용자 중복
-    if db_user:
+# 사용자 등록
+@router.post("/register/")
+async def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    # 사용자 중복 확인
+    existing_user = crud.get_user_by_username(db, username=user.username)
+    if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
-    # 이메일 중복
-    db_user = crud.get_user_by_email(db, email=user.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
 
-    return crud.create_user(db=db, user=user)
+    # 비밀번호 해시화
+    hashed_password = crud.get_password_hash(user.password)
 
+    # 새 사용자 생성
+    new_user = crud.create_user(db, schemas.UserCreate(
+        name=user.name,
+        username=user.username,
+        password=hashed_password,
+        phone=user.phone,
+        email=user.email
+    ))
+
+    # 추천인 정보 처리
+    if user.recommender:
+        recommender = crud.get_user_by_username(db, username=user.recommender)
+        if recommender:
+            crud.add_referral(db, recommender_username=user.recommender, new_user_username=user.username)
+        else:
+            raise HTTPException(status_code=400, detail="Recommender does not exist")
+
+    return {"message": "Registration Successful"}
+
+# 아이디 중복 검사
+@router.get("/check_username/{username}")
+async def check_username(username: str, db: Session = Depends(get_db)):
+    user = crud.get_user_by_username(db, username)
+    if user:
+        return {"exists": True}
+    return {"exists": False}
 
 # 사용자 조회 (모든 사용자)
 @router.get("/", response_model=List[schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
-
 
 # 사용자 조회 (ID로 조회)
 @router.get("/{user_id}", response_model=schemas.User)

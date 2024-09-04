@@ -1,27 +1,29 @@
 # User 모델에 대한 Pydantic 스키마 정의.
 # 생성, 업데이트, 조회에 필요한 스키마 정의.
-
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-# 기본 사용자 스키마 (공통 속성)
-class UserBase(BaseModel):
+class UserCreate(BaseModel):
     name: str
     username: str
-    phone: Optional[str] = None
+    password: str
+    phone: str
     email: EmailStr
-    recommender: Optional[str] = None
+    recommender: Optional[str] = None  # 추천인은 선택적 필드
+
+class UserInDB(UserCreate):
+    hashed_password: str
 
 # 사용자 생성 스키마
-class UserCreate(UserBase):
+class UserCreate(BaseModel):
     password: str
 
 # 사용자 업데이트 스키마
-class UserUpdate(UserBase):
+class UserUpdate(BaseModel):
     password: Optional[str] = None
 
 # 사용자 조회 스키마 (읽기 전용)
-class User(UserBase):
+class User(BaseModel):
     user_id: int
 
     class Config:

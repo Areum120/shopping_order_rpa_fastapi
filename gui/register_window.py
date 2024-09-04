@@ -23,15 +23,16 @@ class RegisterWindow(QtWidgets.QMainWindow):
             return
 
         try:
-            response = requests.get(f"http://127.0.0.1:8000/check_username/{username}")
-
+            # FastAPI 서버에 GET 요청을 보내 아이디의 중복 여부를 확인
+            response = requests.get(f"http://127.0.0.1:8000/users/check_username/{username}")
+            # 중복이면 경고
             if response.status_code == 200:
                 result = response.json()
                 if result['exists']:
-                    QtWidgets.QMessageBox.warning(self, "Check Username", "Username already exists.")
+                    QtWidgets.QMessageBox.warning(self, "Check Username", "아이디가 이미 존재합니다.")
                     self.is_username_checked = False
                 else:
-                    QtWidgets.QMessageBox.information(self, "Check Username", "Username is available.")
+                    QtWidgets.QMessageBox.information(self, "Check Username", "아이디 사용이 가능합니다.")
                     self.is_username_checked = True
 
         except requests.exceptions.RequestException as e:
@@ -47,11 +48,11 @@ class RegisterWindow(QtWidgets.QMainWindow):
         confirm_password = self.lineEdit_7.text()
 
         if password != confirm_password:
-            QtWidgets.QMessageBox.warning(self, "Register", "Passwords do not match!")
+            self.label_7.setText("비밀번호가 일치하지 않습니다. 다시 입력해주세요.")
             return
 
         try:
-            response = requests.post("http://127.0.0.1:8000/register/", json={
+            response = requests.post("http://127.0.0.1:8000/users/register/", json={
                 "name": self.lineEdit.text(),
                 "username": self.lineEdit_3.text(),
                 "password": password,

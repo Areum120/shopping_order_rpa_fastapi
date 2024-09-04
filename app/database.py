@@ -12,8 +12,8 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# 데이터베이스 테이블 생성
-Base.metadata.create_all(bind=engine)
+# 데이터베이스 테이블 생성 (개발 또는 초기화 시에만 사용)
+# Base.metadata.create_all(bind=engine)  # 운영 환경에서는 주석 처리
 
 # 데이터베이스 연결 테스트 함수
 def test_connection():
