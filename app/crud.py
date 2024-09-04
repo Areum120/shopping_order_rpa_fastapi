@@ -16,10 +16,10 @@ def create_user(db: Session, user: schemas.UserCreate):
         phone=user.phone,
         email=user.email
     )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.add(db_user)  # 데이터베이스 세션에 사용자 객체 추가
+    db.commit()  # 데이터베이스에 변경사항 커밋
+    db.refresh(db_user)  # 커밋 후 새로 생성된 사용자 객체를 새로고침
+    return db_user  # 새로 생성된 사용자 객체 반환
 
 # 비밀번호 해쉬로 저장
 def get_password_hash(password: str) -> str:

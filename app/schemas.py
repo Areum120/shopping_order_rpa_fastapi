@@ -9,7 +9,6 @@ class UserCreate(BaseModel):
     password: str
     phone: str
     email: EmailStr
-    recommender: Optional[str] = None  # 추천인은 선택적 필드
 
 class UserInDB(UserCreate):
     hashed_password: str
