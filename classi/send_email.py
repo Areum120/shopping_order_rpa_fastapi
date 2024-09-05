@@ -3,7 +3,9 @@ from email.message import EmailMessage
 from smtplib import SMTP_SSL
 from pathlib import Path
 from openpyxl import load_workbook
-import classi.data_store
+import fastApiProject.classi.data_store
+from fastApiProject import classi
+
 
 class Send:
     def __init__(self, id, pw, df,label_4):

@@ -2,8 +2,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.uic.properties import QtWidgets
-from gui.register_window import RegisterWindow
-from gui.login_window import LoginWindow
+from register_window import RegisterWindow
+from login_window import LoginWindow
 
 def main():
     app = QApplication(sys.argv)
