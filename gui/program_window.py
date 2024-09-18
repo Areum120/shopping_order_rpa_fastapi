@@ -6,6 +6,8 @@ import subprocess
 from datetime import datetime
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit, QApplication
 import pandas as pd
+
+from fastApiProject import classi
 from fastApiProject.classi.send_email import Send
 import fastApiProject.classi.data_store
 import fastApiProject.classi.set_excel_form
