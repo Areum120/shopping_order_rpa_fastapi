@@ -41,7 +41,7 @@
         <property name="title">
          <string>로그인해주세요.</string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>50</x>
@@ -54,14 +54,14 @@
           <item>
            <widget class="QLineEdit" name="lineEdit">
             <property name="text">
-             <string>Username</string>
+             <string>e-mail을 입력해주세요.</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_2">
             <property name="text">
-             <string>Password</string>
+             <string>Password를 입력해주세요.</string>
             </property>
            </widget>
           </item>
@@ -80,7 +80,7 @@
          </layout>
         </widget>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>90</x>
