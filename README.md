@@ -69,4 +69,5 @@ pyinstaller --onefile --noconsole --add-data "gui/order_excel_email_classify.ui;
 
 
 ## 업무 요건
-- 인터넷 사용 가능시
+-> 인터넷만 사용 가능
+-> 오프라인 사용 가능하려면 로그인 토큰-> 레지스트리 저장&삭제 기능 추가가
