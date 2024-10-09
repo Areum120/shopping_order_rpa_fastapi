@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>693</width>
-    <height>1217</height>
+    <width>753</width>
+    <height>1416</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,11 +25,18 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>665</width>
-         <height>1128</height>
+         <width>725</width>
+         <height>1327</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QGroupBox" name="groupBox">
           <property name="minimumSize">
@@ -249,18 +256,18 @@
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>&lt;a href=&quot;https://myaccount.google.com/apppasswords?pli=1&amp;rapt=AEjHL4MGn1uuY2b9MN59aT37kz-EQutjVXglLg6QrIU1_hbUUY5kx-AFjnh65AY8TuxSwhH5-OHIrL3dBwhG03wB4liVZ7tc9idroqMy3C1uYhGNw90g0kU&quot;&gt;구글 앱비밀번호 설정하기&lt;/a&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="label_15">
              <property name="text">
               <string>
 &lt;a href=&quot;https://myaccount.google.com/security&quot;&gt;2단계 인증 활성화하기&lt;/a&gt;
 </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_16">
-             <property name="text">
-              <string>&lt;a href=&quot;https://myaccount.google.com/apppasswords?pli=1&amp;rapt=AEjHL4MGn1uuY2b9MN59aT37kz-EQutjVXglLg6QrIU1_hbUUY5kx-AFjnh65AY8TuxSwhH5-OHIrL3dBwhG03wB4liVZ7tc9idroqMy3C1uYhGNw90g0kU&quot;&gt;구글 앱비밀번호 설정하기&lt;/a&gt;</string>
              </property>
             </widget>
            </item>
@@ -279,7 +286,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>693</width>
+     <width>753</width>
      <height>31</height>
     </rect>
    </property>

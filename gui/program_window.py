@@ -1,26 +1,33 @@
 from PyQt5.QtCore import Qt
-from PyQt5 import uic
+from PyQt5 import uic, QtWidgets
 import os
 import sys
 import subprocess
 from datetime import datetime
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit, QApplication
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit, QApplication, QMessageBox
 import pandas as pd
-
+import requests
 from fastApiProject import classi
 from fastApiProject.classi.send_email import Send
 import fastApiProject.classi.data_store
 import fastApiProject.classi.set_excel_form
+from fastApiProject.gui import login_window
+
+
 
 class ProgramWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, user_email):
         super(ProgramWindow, self).__init__()
-        base_path = os.path.dirname(os.path.abspath(__file__))
-        ui_path = base_path + '\\gui\\order_excel_email_classify.ui'
-        order_ui = uic.loadUi(ui_path, self)
-
+        # base_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path = 'ui/order_excel_email_classify.ui'
+        uic.loadUi(ui_path, self)
         if not os.path.exists(ui_path):
             print(f"UI 파일을 찾을 수 없습니다: {ui_path}")
+
+        self.user_email = user_email  # 전달받은 user_email 저장
+        self.set_user_email(user_email)  # 이메일 설정 함수 호출
+
+        self.login_window = login_window  # LoginWindow 인스턴스 저장
 
         self.folder_path = ""
 
@@ -306,6 +313,35 @@ class ProgramWindow(QMainWindow):
             self.email_content_confirmed = False  # 발송 후 확인 상태 초기화
 
 
+    # 로그인 아이디 인자 넘겨 받기
+    def set_user_email(self, email):
+        self.label_14.setText(f"로그인: {email}")  # 사용자 이메일을 라벨에 표시
+
+    # 창닫기 로그아웃
+    # 창이 닫힐 때 로그아웃 처리
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, '로그아웃 확인',
+                                     '프로그램을 종료하시겠습니까?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.logout_user()  # 로그아웃 함수 호출
+            event.accept()
+        else:
+            event.ignore()
+
+    def logout_user(self):
+        # Implement the logout logic here
+        try:
+            # Send a request to the FastAPI logout endpoint
+            response = requests.post("http://127.0.0.1:8000/logout",
+                                     json={"user_email": self.user_email})  # Use the appropriate user identifier
+            if response.status_code == 200:
+                print("User logged out successfully")
+            else:
+                print("Logout failed:", response.json())
+        except Exception as e:
+            print("Error during logout:", str(e))
 
     # exception 발생시 종료 방지
     def my_exception_hook(exctype, value, traceback):
